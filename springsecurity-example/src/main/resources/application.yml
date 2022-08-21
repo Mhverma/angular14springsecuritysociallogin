@@ -1,0 +1,63 @@
+spring:
+  main:
+    allow-circular-references: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+          facebook:
+            clientId: ${FACEBOOK_CLIENT_ID}
+            clientSecret: ${FACEBOOK_CLIENT_SECRET}
+          github:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+          linkedin:
+            clientSecret: ${LINKED_CLIENT_SECRET}
+            provider: linkedin
+            authorization-grant-type: authorization_code
+            scope: r_liteprofile, r_emailaddress
+            client-name: Linkedin
+            client-authentication-method: post
+            clientId: ${LINKED_CLIENT_ID}
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+
+        provider:
+          linkedin:
+            authorization-uri: https://www.linkedin.com/oauth/v2/authorization
+            token-uri: https://www:linkedin:com/oauth/v2/accessToken
+            user-info-uri: https://api.linkedin.com/v2/me
+            user-name-attribute: id
+
+linkedin:
+  email-address-uri: https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))
+
+
+app:
+  auth:
+    tokenSecret: 4i9kT1aki6
+    tokenExpirationMsec: 864000000
+    authorizedRedirectUris: http://localhost:8081/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
+
+logging:
+  level:
+    org:
+      springframework: TRACE
+      hibernate:
+        SQL: TRACE
+        TYPE: TRACE
